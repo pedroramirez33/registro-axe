@@ -660,20 +660,7 @@ document.querySelectorAll('.delete-btn').forEach(btn => {
     eliminarEvento(id);
   });
 });
-
-  // Scroll suave a los eventos
-  document.getElementById('selectedDateEvents').scrollIntoView({ 
-    behavior: 'smooth', 
-    block: 'nearest' 
-  });
-}
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
-</script>
-<script>
+  
 function eliminarEvento(id) {
   if (!confirm("¿Seguro que quieres eliminar este registro?")) return;
 
@@ -704,7 +691,19 @@ function eliminarEvento(id) {
     }
   };
 }
+
+  // Scroll suave a los eventos
+  document.getElementById('selectedDateEvents').scrollIntoView({ 
+    behavior: 'smooth', 
+    block: 'nearest' 
+  });
+}
 </script>
-  
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
 </body>
 </html>
