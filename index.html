@@ -673,5 +673,38 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
 </script>
+<script>
+function eliminarEvento(id) {
+  if (!confirm("¿Seguro que quieres eliminar este registro?")) return;
+
+  const tx = db.transaction("events", "readwrite");
+  const store = tx.objectStore("events");
+  store.delete(id);
+
+  tx.oncomplete = () => {
+    alert("Registro eliminado");
+    renderCalendar();
+    if (selectedDate) {
+      // volver a mostrar eventos del día seleccionado
+      const year = selectedDate.getFullYear();
+      const month = selectedDate.getMonth();
+      const day = selectedDate.getDate();
+
+      const tx2 = db.transaction("events", "readonly");
+      const store2 = tx2.objectStore("events");
+      store2.getAll().onsuccess = e => {
+        const allEvents = e.target.result;
+        const dateKey = `${year}-${month}-${day}`;
+        const eventsForDay = allEvents.filter(ev => {
+          const d = new Date(ev.timestamp);
+          return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}` === dateKey;
+        });
+        showEventsForDate(day, month, year, eventsForDay);
+      };
+    }
+  };
+}
+</script>
+  
 </body>
 </html>
