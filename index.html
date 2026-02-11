@@ -634,23 +634,32 @@ function showEventsForDate(day, month, year, events) {
   // Ordenar por hora (más reciente primero)
   events.sort((a, b) => b.timestamp - a.timestamp);
 
-  events.forEach(ev => {
-    const time = new Date(ev.timestamp).toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
-
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <div class="fecha">${time}</div>
-      <div><span class="field-label">SITUACIÓN:</span> <span class="field-value">${ev.text}</span></div>
-      <div><span class="field-label">ANSIEDAD:</span> <span class="field-value">${ev.valA}</span></div>
-      <div><span class="field-label">% TAREA:</span> <span class="field-value">${ev.valB}</span></div>
-      <div><span class="field-label">% EMOCIONES:</span> <span class="field-value">${100 - ev.valB}</span></div>
-      ${ev.comments ? `<div><span class="field-label">COMENTARIOS:</span> <span class="field-value">${ev.comments}</span></div>` : ""}
-    `;
-    eventsList.appendChild(li);
+events.forEach(ev => {
+  const time = new Date(ev.timestamp).toLocaleTimeString('es-ES', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
   });
+
+  const li = document.createElement('li');
+  li.innerHTML = `
+    <div class="fecha">${time}</div>
+    <div><span class="field-label">SITUACIÓN:</span> <span class="field-value">${ev.text}</span></div>
+    <div><span class="field-label">ANSIEDAD:</span> <span class="field-value">${ev.valA}</span></div>
+    <div><span class="field-label">% TAREA:</span> <span class="field-value">${ev.valB}</span></div>
+    <div><span class="field-label">% EMOCIONES:</span> <span class="field-value">${100 - ev.valB}</span></div>
+    ${ev.comments ? `<div><span class="field-label">COMENTARIOS:</span> <span class="field-value">${ev.comments}</span></div>` : ""}
+    <button class="delete-btn" data-id="${ev.id}">Eliminar este registro</button>
+  `;
+  eventsList.appendChild(li);
+});
+
+// Agregar funcionalidad de eliminar
+document.querySelectorAll('.delete-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const id = this.getAttribute('data-id');
+    eliminarEvento(id);
+  });
+});
 
   // Scroll suave a los eventos
   document.getElementById('selectedDateEvents').scrollIntoView({ 
